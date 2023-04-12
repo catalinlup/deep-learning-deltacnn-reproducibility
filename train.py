@@ -6,7 +6,10 @@ from neural_nets.mobilenet_original import mobilenet_v2
 from neural_nets.ObjectDetector import ObjectDetector
 from config import *
 import numpy as np
+from architectures import ARCHS
 
+
+MODEL_NAME='mobilenet_deltacnn'
 
 dataset = PennFudanDataset('data/PennFudanPed/PennFudanPed', transforms=get_transform(True, size=IMG_SIZE))
 
@@ -19,13 +22,12 @@ data_loader = torch.utils.data.DataLoader(
 #     collate_fn=collate_fn)
 
 
-backbone = mobilenet_v2(pretrained=True).to(DEVICE)
-object_detector = ObjectDetector(backbone, 2).to(DEVICE)
+model = ARCHS[MODEL_NAME]
 
 
 # Constructing an optimizer
-params = [p for p in object_detector.parameters() if p.requires_grad]
-optimizer = torch.optim.Adam(params, lr=0.005, weight_decay=0.0005)
+params = [p for p in model.parameters() if p.requires_grad]
+optimizer = torch.optim.Adam(params, lr=0.001, weight_decay=0.0005)
 # and a learning rate scheduler
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10):
@@ -47,7 +49,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
         targets = [{k: v.to(device) for k, v in t.items()} for t in target]
 
         loss_dict = model(input, targets)
-        print(loss_dict)
+        # print(loss_dict)
         losses = sum(loss for loss in loss_dict.values())
 
         losses.backward()
@@ -57,10 +59,10 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
         loss_value = losses.item()
         all_losses.append(loss_value)
         if i % print_freq == 0:
-            print(f'Epoch {epoch} - {i / total * 100}% - Loss: {loss_value}')
+            print(f'Epoch {epoch} - {round(i / total) * 100}% - Loss: {loss_value}')
 
     return np.mean(all_losses)
     
 
-
-print(train_one_epoch(object_detector, optimizer, data_loader, DEVICE, 0, 10))
+for i in range(EPOCHS):
+    print(train_one_epoch(model, optimizer, data_loader, DEVICE, i, 2))

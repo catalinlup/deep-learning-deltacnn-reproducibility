@@ -10,7 +10,7 @@ class ObjectDetector(nn.Module):
         self.feature_extractor = baseModel.features
         self.feature_extractor.out_channels = baseModel.last_channel
 
-        self.anchor_generator = AnchorGenerator(sizes=((8, 16, 32, 64),),
+        self.anchor_generator = AnchorGenerator(sizes=((16, 32, 64, 128, 256),),
                                    aspect_ratios=((0.5, 1.0, 2.0),))
         
         self.roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=['0'],
