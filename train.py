@@ -10,6 +10,7 @@ from architectures import ARCHS
 from train_jobs import TRAIN_JOBS
 import sys
 import matplotlib.pyplot as plt
+import cv2
 
 
 train_job = TRAIN_JOBS[sys.argv[1]]
@@ -22,9 +23,7 @@ else:
 
 dataset = PennFudanDataset('data/PennFudanPed/PennFudanPed', transforms=get_transform(True, size=IMG_SIZE))
 
-data_loader = torch.utils.data.DataLoader(
-    dataset, batch_size=train_job['batch_size'], shuffle=True, num_workers=NUM_WORKERS,
-    collate_fn=collate_fn)
+data_loader = train_job['data_loader']()
 
 # data_loader_test = torch.utils.data.DataLoader(
 #     dataset_test, batch_size=1, shuffle=False, num_workers=4,

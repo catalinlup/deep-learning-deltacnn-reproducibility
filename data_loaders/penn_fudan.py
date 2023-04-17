@@ -2,6 +2,7 @@ import os
 import numpy as np
 import torch
 from PIL import Image
+from config import IMG_SIZE
 
 
 class PennFudanDataset(torch.utils.data.Dataset):
@@ -18,6 +19,9 @@ class PennFudanDataset(torch.utils.data.Dataset):
         img_path = os.path.join(self.root, "PNGImages", self.imgs[idx])
         mask_path = os.path.join(self.root, "PedMasks", self.masks[idx])
         img = Image.open(img_path).convert("RGB")
+
+        img_width = float(img.width)
+        img_height = float(img.height)
         # note that we haven't converted the mask to RGB,
         # because each color corresponds to a different instance
         # with 0 being background
@@ -38,10 +42,10 @@ class PennFudanDataset(torch.utils.data.Dataset):
         boxes = []
         for i in range(num_objs):
             pos = np.where(masks[i])
-            xmin = np.min(pos[1])
-            xmax = np.max(pos[1])
-            ymin = np.min(pos[0])
-            ymax = np.max(pos[0])
+            xmin = np.min(pos[1]) / img_width * IMG_SIZE[0]
+            xmax = np.max(pos[1]) / img_width * IMG_SIZE[0]
+            ymin = np.min(pos[0]) / img_height * IMG_SIZE[1]
+            ymax = np.max(pos[0]) / img_height * IMG_SIZE[1]
             boxes.append([xmin, ymin, xmax, ymax])
 
         # convert everything into a torch.Tensor
@@ -62,6 +66,7 @@ class PennFudanDataset(torch.utils.data.Dataset):
         target["image_id"] = image_id
         target["area"] = area
         target["iscrowd"] = iscrowd
+        target['scores'] = torch.ones((num_objs,), dtype=torch.float32)
 
         if self.transforms is not None:
             img = self.transforms(img)
