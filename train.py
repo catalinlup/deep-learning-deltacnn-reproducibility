@@ -7,14 +7,23 @@ from neural_nets.ObjectDetector import ObjectDetector
 from config import *
 import numpy as np
 from architectures import ARCHS
+from train_jobs import TRAIN_JOBS
+import sys
+import matplotlib.pyplot as plt
 
 
-MODEL_NAME='mobilenet_deltacnn'
+train_job = TRAIN_JOBS[sys.argv[1]]
+
+if len(sys.argv) > 2:
+    OUTPUT_PLOT = bool(sys.argv[2])
+else:
+    OUTPUT_PLOT = False
+
 
 dataset = PennFudanDataset('data/PennFudanPed/PennFudanPed', transforms=get_transform(True, size=IMG_SIZE))
 
 data_loader = torch.utils.data.DataLoader(
-    dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS,
+    dataset, batch_size=train_job['batch_size'], shuffle=True, num_workers=NUM_WORKERS,
     collate_fn=collate_fn)
 
 # data_loader_test = torch.utils.data.DataLoader(
@@ -22,12 +31,14 @@ data_loader = torch.utils.data.DataLoader(
 #     collate_fn=collate_fn)
 
 
-model = ARCHS[MODEL_NAME]
+model = ARCHS[train_job['architecture_name']]()
+model.train()
+
 
 
 # Constructing an optimizer
 params = [p for p in model.parameters() if p.requires_grad]
-optimizer = torch.optim.Adam(params, lr=0.001, weight_decay=0.0005)
+optimizer = torch.optim.Adam(params, lr=train_job['lr'], weight_decay=train_job['weight_decay'])
 # and a learning rate scheduler
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10):
@@ -35,7 +46,6 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
     Trains the model for one epoch
     """
 
-    model.train()
 
     all_losses = []
 
@@ -64,5 +74,20 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
     return np.mean(all_losses)
     
 
-for i in range(EPOCHS):
-    print(train_one_epoch(model, optimizer, data_loader, DEVICE, i, 2))
+epoch_losses = []
+for i in range(train_job['epochs']):
+    epoch_loss = train_one_epoch(model, optimizer, data_loader, DEVICE, i, 2)
+    print('Epoch loss ', epoch_loss)
+    epoch_losses.append(epoch_loss)
+
+
+
+if OUTPUT_PLOT:
+    plt.plot(epoch_losses)
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.title('Train Loss')
+
+    plt.savefig(f'./saved_plots/{train_job["model_name"]}.png')
+
+torch.save(model.state_dict(), f'./saved_models/{train_job["model_name"]}.pt')
