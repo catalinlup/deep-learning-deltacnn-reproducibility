@@ -8,7 +8,7 @@ def get_pennfudan():
     dataset = PennFudanDataset('data/PennFudanPed/PennFudanPed', transforms=get_transform(False, size=IMG_SIZE))
 
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=2, shuffle=False, num_workers=NUM_WORKERS,
+        dataset, batch_size=1, shuffle=False, num_workers=NUM_WORKERS,
         collate_fn=collate_fn)
     
     return data_loader
@@ -36,10 +36,10 @@ TRAIN_JOBS = {
 
     'delta_cnn': {
         'model_name': 'mobilenet_deltacnn',
-        'architecture_name': 'mobilenet_classic',
+        'architecture_name': 'mobilenet_deltacnn',
         'lr': 0.001,
         'weight_decay': 0.0005,
-        'epochs': 10,
+        'epochs': 2,
         'data_loader': get_pennfudan
     }
 }

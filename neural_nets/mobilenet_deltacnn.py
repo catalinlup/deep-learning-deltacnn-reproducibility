@@ -214,6 +214,8 @@ class DeltaCNN_MobileNetV2(DCModule):
                 nn.init.zeros_(m.bias)
 
     def _forward_impl(self, x):
+        print(x.shape)
+        # return 0
         x = self.sparsify(x) # added
         x = self.features(x)
 
@@ -227,6 +229,10 @@ class DeltaCNN_MobileNetV2(DCModule):
         return x
 
     def forward(self, x):
+        print('###############################################')
+        print('Forward')
+        print(x.shape)
+        # return 0
         return self._forward_impl(x)
 
 

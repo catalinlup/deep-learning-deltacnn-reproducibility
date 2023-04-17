@@ -51,7 +51,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
     total = len(data_loader)
 
     for i, (img, target) in enumerate(data_loader):
-
+        model.train()
         optimizer.zero_grad()
 
         input = torch.stack(img).to(device)
@@ -70,23 +70,27 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
         if i % print_freq == 0:
             print(f'Epoch {epoch} - {round(i / total) * 100}% - Loss: {loss_value}')
 
+        # torch.cuda.empty_cache()
+
     return np.mean(all_losses)
     
 
-epoch_losses = []
-for i in range(train_job['epochs']):
-    epoch_loss = train_one_epoch(model, optimizer, data_loader, DEVICE, i, 2)
-    print('Epoch loss ', epoch_loss)
-    epoch_losses.append(epoch_loss)
+if __name__ == '__main__':
+    model.train()
+    epoch_losses = []
+    for i in range(train_job['epochs']):
+        epoch_loss = train_one_epoch(model, optimizer, data_loader, DEVICE, i, 2)
+        print('Epoch loss ', epoch_loss)
+        epoch_losses.append(epoch_loss)
 
 
 
-if OUTPUT_PLOT:
-    plt.plot(epoch_losses)
-    plt.ylabel('Loss')
-    plt.xlabel('Epoch')
-    plt.title('Train Loss')
+    if OUTPUT_PLOT:
+        plt.plot(epoch_losses)
+        plt.ylabel('Loss')
+        plt.xlabel('Epoch')
+        plt.title('Train Loss')
 
-    plt.savefig(f'./saved_plots/{train_job["model_name"]}.png')
+        plt.savefig(f'./saved_plots/{train_job["model_name"]}.png')
 
-torch.save(model.state_dict(), f'./saved_models/{train_job["model_name"]}.pt')
+    torch.save(model.state_dict(), f'./saved_models/{train_job["model_name"]}.pt')
