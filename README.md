@@ -21,7 +21,7 @@ Our code: https://github.com/catalinlup/deep-learning-deltacnn-reproducibility
 --- 
 
 
-### Introduction 
+### 1. Introduction 
 Videos have become an essential part of data analysis, and Convolutional Neural Networks (CNNs) have proved essential over recent years to gain an understanding of the actions and the environment by analyzing video frames. However, recording and analyzing large amounts of video information comes at tremendous costs, both in terms of storage to record the data and computational power to process the frames. Therefore, it is interesting to investigate whether the same understanding can be gained without having to process each frame fully. This was the basis for the research paper "End-to-End CNN Inference of Sparse Frame Differences in Videos" by the Graz University of Technology and Meta Reality Labs, published in 2022. The number of applications for such technology is vast, from self-driving cars to human pose estimation, and from improving hardware for human-robot interactions detecting objects to monitoring long-term wheater patterns. Gaining the same understanding of the problem using less data should allow for improved performance in terms of processing power required and computation time.
 
 
