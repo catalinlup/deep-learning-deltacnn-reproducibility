@@ -310,10 +310,15 @@ python predict.py <the name of the prediction job>
 --- 
 ### References 
 [1. DeltaCNN: End-to-End CNN Inference of Sparse Frame Differences in Videos. Mathias Parger, Chengcheng Tang, Christopher D. Twigg, Cem Keskin, Robert Wang, Markus Steinberger, CVPR 2022, June 2022](https://dabeschte.github.io/DeltaCNN/)
+
 [2. Face and hand tracking in the browser with MediaPipe and TensorFlow.js](https://blog.tensorflow.org/2020/03/face-and-hand-tracking-in-browser-with-mediapipe-and-tensorflowjs.html)
+
 [3. Human3.6M: Large Scale Datasets and Predictive Methods for 3D Human Sensing in Natural Environments. Catalin Ionescu, Dragos Papava, Vlad Olaru and Cristian Sminchisescu. IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 36, No. 7, July 2014](http://vision.imar.ro/human3.6m/pami-h36m.pdf)
+
 [4. EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks. Mingxing Tan, Quoc V. Le. ICML 2019](https://arxiv.org/abs/1905.11946)
+
 [5. Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks. Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun. 2016. ](https://arxiv.org/abs/1506.01497)
+
 [6. Generalized Intersection Over Union: A Metric and a Loss for Bounding Box Regression. Hamid Rezatofighi, Nathan Tsoi, JunYoung Gwak, Amir Sadeghian, Ian Reid, Silvio Savarese. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2019, pp. 658-666.](https://openaccess.thecvf.com/content_CVPR_2019/html/Rezatofighi_Generalized_Intersection_Over_Union_A_Metric_and_a_Loss_for_CVPR_2019_paper.html)
 
 
