@@ -339,10 +339,9 @@ python predict.py <the name of the prediction job>
 
 
 #### Crina Mihalache
-
 - Review of the original paper.
-- Doing research on how DeltaCNN works.
-- Preparing slides for the weekly TA meetings.
+- Doing research on DeltaCNN & attempt at basic Resnet implementation.
+- Analyzing proposed data set and alternatives.
 - Note taking and project organization.
 - Working on the blog post.
 
