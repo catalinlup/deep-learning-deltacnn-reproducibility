@@ -188,7 +188,7 @@ To compensate for not having experimental results for the DeltaCNN based FasterR
 
 #### 1. Optimizing the learning rate
 
-Training was performed on the video sequence number 4 from the MOT16 dataset. The weight decay (regularization) parameter throughout all of the experiments was set to 5 * 10^-4. Each training session occurred using batches of size 8, 10 epochs and the Adam optimizer. All the frames were resized to a resolution of 96x96 pixels, to save up GPU memory and speed up computations.
+Training was performed on the video sequence number 4 from the MOT16 dataset. The weight decay (regularization) parameter throughout all of the experiments was set to $$5 * 10^-4$$. Each training session occurred using batches of size 8, 10 epochs and the Adam optimizer. All the frames were resized to a resolution of 96x96 pixels, to save up GPU memory and speed up computations.
 
 
 
@@ -205,7 +205,7 @@ Training was performed on the video sequence number 4 from the MOT16 dataset. Th
 *Figure 6*: This figure showcases the train loss for a learning rate of 10^-3. It can be seen that the prblems associated with the previous learning rates are avoided and the train loss decreases fast without overshooting.
 
 
-Looking at the three graphs, we can conclude that a learning rate of 10-7 is too low, a learning rate of 10 is too high and leads to overshooting, while a learning rate of **10^-3** seems reasonable.
+Looking at the three graphs, we can conclude that a learning rate of 10^-7 is too low, a learning rate of 10 is too high and leads to overshooting, while a learning rate of **10^-3** seems reasonable.
 
 
 #### 2. Optimizing weight decay (regularization)
