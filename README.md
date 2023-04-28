@@ -338,7 +338,7 @@ python predict.py <the name of the prediction job>
 - Cloud Machine Deployment.
 
 
-#### Crina Mihalache
+#### Florina Crina Mihalache
 - Review of the original paper.
 - Doing research on DeltaCNN & attempt at basic Resnet implementation.
 - Analyzing proposed data set and alternatives.
