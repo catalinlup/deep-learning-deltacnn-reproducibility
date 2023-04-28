@@ -29,11 +29,13 @@ Video streams typically have neighboring frames that are very similar to each ot
 
 
 ![hand](https://3.bp.blogspot.com/-CWTYSEEB3mA/XmfimK9wP1I/AAAAAAAAC0E/wIvHQktx8IEbeB_vbtIEZt3VFNayIFzRACLcBGAsYHQ/s1600/hand_trimmed.gif)
+
 *Figure 1:* Visualization of keypoint detection and tracking for hand pose [[2](https://blog.tensorflow.org/2020/03/face-and-hand-tracking-in-browser-with-mediapipe-and-tensorflowjs.html)]
 
 
 <!-- ![](https://i.imgur.com/zlI4ztN.png) -->
 ![](https://i.imgur.com/VNTlM9z.png)
+
 *Figure 2:* Working principle of spatially sparse convolutions for videos. Computing the difference between the current and previous input, large parts of convolution input become zero, shown in white. Since zero-valued inputs do not contribute to the output, these values can be skipped to reduce the number of operations.
 
 
@@ -46,6 +48,7 @@ The article discusses DeltaCNN, a new framework for accelerating video inference
 
 
 ![](https://i.imgur.com/MGVkpTZ.png)
+
 *Table 1:* Speed and accuracy comparisons of different CNN backends used for pose estimation on the Human3.6M dataset. The same set of auto-tuned thresholds for update truncation is used for all devices and batch sizes b [[1](https://dabeschte.github.io/DeltaCNN/)]. 
 
 
@@ -104,6 +107,7 @@ In the original paper, the authors used the EfficientDet neural network architec
 
 
 ![](https://i.imgur.com/GX9H4Hs.png)
+
 *Figure 3*: Architecture of FasterRCNN [[5](https://arxiv.org/abs/1506.01497)]
 
 
@@ -182,12 +186,15 @@ Training was performed on the video sequence number 4 from the MOT16 dataset. Th
 
 
 ![](https://i.imgur.com/MmvNTHP.png)
+
 *Figure 4:* This figure showcases the train loss for a learning rate of 10. We can see that the loss keeps on fluctuating. This suggests that the learning rate is too high and our optimizer overshoots.
 
 ![](https://i.imgur.com/eXB67d3.png)
+
 *Figure 5:* This figure showcases the train loss for a learning rate of 10^-7. We can see that the loss is decreasing linearly, rather than exponentially, which suggests that the learning rate is too low and that the optimizer converges too slowly.
 
 ![](https://i.imgur.com/oWKEtzU.png)
+
 *Figure 6*: This figure showcases the train loss for a learning rate of 10^-3. It can be seen that the prblems associated with the previous learning rates are avoided and the train loss decreases fast without overshooting.
 
 
@@ -199,12 +206,15 @@ Looking at the three graphs, we can conclude that a learning rate of 10-7 is too
 In this set of experiments, rather than varying the learning rate, we kept the learning rate constant at 10^-3 and we changed the regularization parameter (the weight decay). All of the other parameters were kept the same as previously.
 
 ![](https://i.imgur.com/nbdI5S3.png)
+
 *Figure 7*: This figure showcases the train loss for a weight decay of 1. While regularization is supposed to increase the train loss with the promise of better test accuracies, regularization in this case seems to be exaggerated, as the train loss is continuously increasing.
 
 ![](https://i.imgur.com/ZIRJtmo.png)
+
 *Figure 8*: This figure showcases the train loss for a weight decay of 0.15.
 
 ![](https://i.imgur.com/qbcIG88.png)
+
 *Figure 9*: This figure showcases the train loss when the weight decay is 0 (no regularization).
 
 
