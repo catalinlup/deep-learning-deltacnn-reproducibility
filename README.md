@@ -31,7 +31,7 @@ Videos have become an essential part of data analysis, and Convolutional Neural 
 Video streams typically have neighboring frames that are very similar to each other, differing by only a few pixels as shown in *Figure 1*. To make convolutional neural networks faster, researchers have explored exploiting this property of video streams. One approach is to only propagate the difference between neighboring frames through the network, instead of processing every frame individually. In a recent paper, a novel convolution operation called DeltaCNN was proposed to achieve this. DeltaCNN calculates the difference between adjacent frames and feeds this delta information to the network, resulting in significant computational savings without sacrificing performance. This is useful in this case as one is only interested in the information gained from the movement of the hand not on that arising from perceived movement of the environment. 
 
 
-![hand](https://3.bp.blogspot.com/-CWTYSEEB3mA/XmfimK9wP1I/AAAAAAAAC0E/wIvHQktx8IEbeB_vbtIEZt3VFNayIFzRACLcBGAsYHQ/s1600/hand_trimmed.gif)
+![hand](./blogpost_assets/hand.gif)
 
 *Figure 1:* Visualization of keypoint detection and tracking for hand pose [[2](https://blog.tensorflow.org/2020/03/face-and-hand-tracking-in-browser-with-mediapipe-and-tensorflowjs.html)]
 
