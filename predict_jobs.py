@@ -30,5 +30,32 @@ PREDICT_JOBS = {
         'model_name': 'mobilenet_classic',
         'architecture_name': 'mobilenet_original',
         'data_loader': get_pennfudan
-    }
+    },
+    
+    'classic_lr3_wd4': {
+        'model_name': 'mobilenet_classic_lr3_wd4',
+        'architecture_name': 'mobilenet_original',
+        'data_loader': get_mot16
+
+    },
+    
+    'classic_lr3_wdb1': {
+        'model_name': 'mobilenet_classic_lr3_wdb1',
+        'architecture_name': 'mobilenet_original',
+        'data_loader': get_mot16
+
+    },
+    'classic_lr3_wd0': {
+        'model_name': 'mobilenet_classic_lr3_wd0',
+        'architecture_name': 'mobilenet_original',
+        'data_loader': get_mot16
+
+    },
+    
+    'classic_lr3_wd015': {
+        'model_name': 'mobilenet_classic_lr3_wd015',
+        'architecture_name': 'mobilenet_original',
+        'data_loader': get_mot16
+
+    },
 }

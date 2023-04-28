@@ -32,6 +32,8 @@ prediction_times = []
 ious = []
 
 for i, (img, target) in enumerate(data_loader):
+    
+    # print(f'{i} / {len(data_loader)}')
 
     time0 = time.time()
 

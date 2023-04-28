@@ -54,7 +54,7 @@ class Mot16Dataset(torch.utils.data.Dataset):
         target = {}
         target["boxes"] = boxes
         target["labels"] = labels
-        target["masks"] = masks
+        # target["masks"] = masks
         target["image_id"] = image_id
         target["area"] = area
         target["iscrowd"] = iscrowd

@@ -56,7 +56,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
 
         input = torch.stack(img).to(device)
         targets = [{k: v.to(device) for k, v in t.items()} for t in target]
-
+        
         loss_dict = model(input, targets)
         # print(loss_dict)
         losses = sum(loss for loss in loss_dict.values())
@@ -86,6 +86,7 @@ if __name__ == '__main__':
 
 
     if OUTPUT_PLOT:
+        print(epoch_losses)
         plt.plot(epoch_losses)
         plt.ylabel('Loss')
         plt.xlabel('Epoch')

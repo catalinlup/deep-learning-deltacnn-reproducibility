@@ -42,14 +42,17 @@ def show_image_cv2(img, predictions):
         cv2.putText(image,f'{score * 199}',(x2+10, y2), 0,0.3,(0,255,0))
     cv2.imshow('Detection stream', image)
 
+    
+def get_device():
+    return torch.device('cuda:0') if torch.cuda.is_available() else 'cpu'
 
 def compute_iou(prediction, target):
     """
     Computes the iou of the object detector.
     """
 
-    target_boxes = target['boxes']
-    predicted_boxes = prediction['boxes']
+    target_boxes = target['boxes'].to(get_device())
+    predicted_boxes = prediction['boxes'].to(get_device())
 
     ious = box_iou(target_boxes, predicted_boxes)
 
@@ -60,5 +63,3 @@ def compute_iou(prediction, target):
 
 
 
-def get_device():
-    return torch.device('cuda:0') if torch.cuda.is_available() else 'cpu'
