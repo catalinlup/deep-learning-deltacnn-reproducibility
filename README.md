@@ -2,15 +2,18 @@
 
 
 Original paper: End-to-End CNN Inference of Sparse Frame Differences in Videos
+
 Paper: https://arxiv.org/abs/2203.03996
+
 Available code by authors: https://dabeschte.github.io/DeltaCNN/
 
 ---
 
 Reproducibility project by: 
-Crina Mihalache  - 4827333 - F.C.Mihalache@student.tudelft.nl
-Catalin Lupau - 5042143 - C.P.Lupau@student.tudelft.nl
-Edmundo Sanz-Gadea López - 4553128 - E.Sanz-GadeaLopez@student.tudelft.nl 
+
+- Crina Mihalache  - 4827333 - F.C.Mihalache@student.tudelft.nl
+- Catalin Lupau - 5042143 - C.P.Lupau@student.tudelft.nl
+- Edmundo Sanz-Gadea López - 4553128 - E.Sanz-GadeaLopez@student.tudelft.nl 
 
 
 Our code: https://github.com/catalinlup/deep-learning-deltacnn-reproducibility
