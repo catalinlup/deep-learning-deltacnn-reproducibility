@@ -1,17 +1,19 @@
 # A step towards reproducing DeltaCNN
 
 
-Original paper: End-to-End CNN Inference of Sparse Frame Differences in Videos   
-Paper: https://arxiv.org/abs/2203.03996  
-Available code by authors: https://dabeschte.github.io/DeltaCNN/  
-
+Original paper: End-to-End CNN Inference of Sparse Frame Differences in Videos
+Paper: https://arxiv.org/abs/2203.03996
+Available code by authors: https://dabeschte.github.io/DeltaCNN/
 
 ---
 
-Reproducibility project by:   
-[Catalin Lupau](https://github.com/catalinlup)   
-[Edmundo Sanz-Gadea López](https://github.com/sanzgadea)  
-Crina Mihalache 
+Reproducibility project by: 
+Crina Mihalache  - 4827333 - F.C.Mihalache@student.tudelft.nl
+Catalin Lupau - 5042143 - C.P.Lupau@student.tudelft.nl
+Edmundo Sanz-Gadea López - 4553128 - E.Sanz-GadeaLopez@student.tudelft.nl 
+
+
+Our code: https://github.com/catalinlup/deep-learning-deltacnn-reproducibility
 
 --- 
 
@@ -26,12 +28,12 @@ Videos have become an essential part of data analysis, and Convolutional Neural 
 Video streams typically have neighboring frames that are very similar to each other, differing by only a few pixels as shown in *Figure 1*. To make convolutional neural networks faster, researchers have explored exploiting this property of video streams. One approach is to only propagate the difference between neighboring frames through the network, instead of processing every frame individually. In a recent paper, a novel convolution operation called DeltaCNN was proposed to achieve this. DeltaCNN calculates the difference between adjacent frames and feeds this delta information to the network, resulting in significant computational savings without sacrificing performance. This is useful in this case as one is only interested in the information gained from the movement of the hand not on that arising from perceived movement of the environment. 
 
 
-![hand](https://3.bp.blogspot.com/-CWTYSEEB3mA/XmfimK9wP1I/AAAAAAAAC0E/wIvHQktx8IEbeB_vbtIEZt3VFNayIFzRACLcBGAsYHQ/s1600/hand_trimmed.gif) 
+![hand](https://3.bp.blogspot.com/-CWTYSEEB3mA/XmfimK9wP1I/AAAAAAAAC0E/wIvHQktx8IEbeB_vbtIEZt3VFNayIFzRACLcBGAsYHQ/s1600/hand_trimmed.gif)
 *Figure 1:* Visualization of keypoint detection and tracking for hand pose [[2](https://blog.tensorflow.org/2020/03/face-and-hand-tracking-in-browser-with-mediapipe-and-tensorflowjs.html)]
 
 
 <!-- ![](https://i.imgur.com/zlI4ztN.png) -->
-![](https://i.imgur.com/VNTlM9z.png)  
+![](https://i.imgur.com/VNTlM9z.png)
 *Figure 2:* Working principle of spatially sparse convolutions for videos. Computing the difference between the current and previous input, large parts of convolution input become zero, shown in white. Since zero-valued inputs do not contribute to the output, these values can be skipped to reduce the number of operations.
 
 
@@ -152,6 +154,14 @@ The alternative download dataset has been proven promising at first. By followin
 Provided this was not the original source for the Human3.6M dataset, it is not surprising that such issues would occur. However, it made the used of this dataset during the project impossible. -->
 
 
+
+<!-- #### Implementation DeltaCNN vs. CNN ''OR'' CNN hyperparameter tuning
+ -->
+
+---
+
+
+
 ### 4. Results
 
 Unfortunately, we were not able to obtain the full set results we set out to achieve due to running into a series of issues, the most important of which were:
@@ -161,12 +171,163 @@ Unfortunately, we were not able to obtain the full set results we set out to ach
 * Our next attempt was to try to run our experiments in the cloud. We spent a lot of time trying to obtain a Google Cloud GPU machine, but with little success. Google Cloud required us to make a request to increase our GPU quota. However, once we did that, deploying the cloud machine still did not work, as the resources we would try to allocate were never available. We tried several other cloud providers, until we found a cloud provider called Vultr. We were able to deploy a GPU powered cloud machine on Vultr using our own credit. However, we were not able to install the DeltaCNN library on that cloud machine, due to a mismatch between the required and the installed CUDA version. We did not succeed in changing the driver and CUDA version installed on the Vultr cloud machine due to a lack of system privileges.
 
 
-As a result of the issues encountered above, we were not able to follow through with our experiments as planned. However, our code for training the networks and running the benchmark is fully functional and, given the necessary resources, it can be run to obtain the full set of results.
+As a result of the issues encountered above, we were not able to follow through with our experiments as planned. However, our code for training the networks and running the benchmark is fully functional and, given the necessary resources, it can be run to obtain the full set of results. The code is available on Github and can be accessed through the following link: [DeltaCNN Reproducibility Project](https://github.com/catalinlup/deep-learning-deltacnn-reproducibility).
 
+To compensate for not having experimental results for the DeltaCNN based FasterRCNN, we provide the following graphs showcasing our attempt to optimize the learning rate and weight decay for the version of FastRCNN with MobilenetV2 backbone that uses classical convolutions.
+
+#### 1. Optimizing the learning rate
+
+Training was performed on the video sequence number 4 from the MOT16 dataset. The weight decay (regularization) parameter throughout all of the experiments was set to 5 * 10^-4. Each training session occurred using batches of size 8, 10 epochs and the Adam optimizer. All the frames were resized to a resolution of 96x96 pixels, to save up GPU memory and speed up computations.
+
+
+
+![](https://i.imgur.com/MmvNTHP.png)
+*Figure 4:* This figure showcases the train loss for a learning rate of 10. We can see that the loss keeps on fluctuating. This suggests that the learning rate is too high and our optimizer overshoots.
+
+![](https://i.imgur.com/eXB67d3.png)
+*Figure 5:* This figure showcases the train loss for a learning rate of 10^-7. We can see that the loss is decreasing linearly, rather than exponentially, which suggests that the learning rate is too low and that the optimizer converges too slowly.
+
+![](https://i.imgur.com/oWKEtzU.png)
+*Figure 6*: This figure showcases the train loss for a learning rate of 10^-3. It can be seen that the prblems associated with the previous learning rates are avoided and the train loss decreases fast without overshooting.
+
+
+Looking at the three graphs, we can conclude that a learning rate of 10-7 is too low, a learning rate of 10 is too high and leads to overshooting, while a learning rate of **10^-3** seems reasonable.
+
+
+#### 2. Optimizing weight decay (regularization)
+
+In this set of experiments, rather than varying the learning rate, we kept the learning rate constant at 10^-3 and we changed the regularization parameter (the weight decay). All of the other parameters were kept the same as previously.
+
+![](https://i.imgur.com/nbdI5S3.png)
+*Figure 7*: This figure showcases the train loss for a weight decay of 1. While regularization is supposed to increase the train loss with the promise of better test accuracies, regularization in this case seems to be exaggerated, as the train loss is continuously increasing.
+
+![](https://i.imgur.com/ZIRJtmo.png)
+*Figure 8*: This figure showcases the train loss for a weight decay of 0.15.
+
+![](https://i.imgur.com/qbcIG88.png)
+*Figure 9*: This figure showcases the train loss when the weight decay is 0 (no regularization).
+
+
+
+Figures 7, 8 and 9 show the train loss for different values of the regularization parameter (weight decay). Looking at these 3 figures, we can observe the influence of the regularization parameter on the train loss. If regularization is too high (like in Figure 7), the train loss will overshoot. For an intermediate value of the regularization parameter, like in Figure 8, the train loss converges asymptotically to a value higher than the minimum possible bayesian loss, which is the desired behavior when performing regularization.
+
+
+#### 3. Evaluation
+
+After evaluating our trained models against the test set - video sequence 02 of the MOT16 dataset - on a cloud machine using an NVIDIA A10 GPU with 24GB of memory, the following results were obtained.
+
+
+
+|      Model Type      | Weight Decay | Avg. IOU | Avg. FPS |
+|:--------------------:|:------------:|:--------:|:--------:|
+| Classic convolutions |       0      |   0.182  |   38.57  |
+| Classic convolutions |     5e-4     |   0.160  |   37.46  |
+| Classic convolutions |      0.15    |   0.126  |   38.06  |
+| Classic convolutions |       1      |   0.123  |   36.02  |
+|  Delta convolutions  |       ?      |     ?    |     ?    |
+
+*Table 2*: Showcases the results, i.e. average intersection over unit and average frames per second, obtained as a result of the evaluation.
+
+The results obtained by running the evaluation are presented in the table above. One aspect we can observe is that the weight decay seems to have a negative impact on the IOU. This suggests that the training dataset was representative for the true distribution and, thus, no regularization was needed. No significant difference in the the speed (FPS) can be noticed in the tested model. This makes sense, since all the models that were tested use the same architecture and the same type of convolutions (classical convolutions). Had we been able to train and test the version of the model with delta convolutions, an improvement in speed would have probably been observed.
+
+Another aspect that needs to be discussed is the poor IOU performance of all the models. The poor performance is likely the result of having scaled the images to a very low resolution (96x96). The MOT16 dataset contains many pedestrians that are quite far-away, so they have a small footprint on the image. Drastically reducing the resolution likely made many of the far-away pedestrians unidentifiable or undistinguishable from other pedestrians close to them.
+
+
+---
+
+### 5. Discussion
+
+
+Our conclusion is that the chosen paper is **not** easy to reproduce for the following reasons:
+
+- The models proposed by the paper are large and difficult to train without a GPU with enough memory.
+- The datasets used for the experiments are very large and difficult to preprocess or load on a remote machine.
+- The provided DeltaCNN library is unnecessarily hard to install as it requires very specific versions of CUDA and PyTorch.
+- The metrics used as part of the evaluation are not well explained. When reading the paper, it was not clear to us what the PCKh metric was, for example.
+- The inner workings of DeltaCNN are explained way too briefly. It required a lot of effort on our side to understand how the proposed technique works.
+
+
+Having established the main shortcomings, our suggestions to improve reproducibility are the following:
+
+- The creation of a more cross-compatible version of the DeltaCNN library.
+- The authors should redo the experimental section of the paper, focusing on a series of small scale experiments that can be run by everyone, while still being able to showcase the advantage of DeltaCNN.
+- The paper should provide a concrete example that shows step by step how an input tensor would be processed by a DeltaCNN network.
+- The paper should include an appendix that explains all metrics that were used during evaluation, as well as the reasons why these metrics were chosen.
+- The experimental section of the paper should include significance testing to show that the obtained results are scientifically sound.
+
+<!-- #### Assesment of paper reproducibility [maybe move before method, to explain why we are implementing totally different things] -->
+
+<!-- List all identified issues and describe individually; Follow "A Step Toward Quantifying Independently Reproducible Machine Learning Research"
+ -->
+
+<!-- Issue 1: Setting up the Google Cloud Machine 
+Issue 2: CUDA; missing information
+Issue 3: Cannot implment Pose-ResNet, only ResNet so far 
+Issue 4: Evaluation metric for evaluating perfromance PCKh not explained in the paper, not any additional information on how is it implemented was offered. It is not freely avialble on resources such as TorchMetrics. An implementation has been found on the following public repository however it is not certain the same method is used by the authors [PCKh](https://github.com/ilovepose/fast-human-pose-estimation.pytorch/blob/master/lib/core/evaluate.py) -->
+
+
+
+
+---
+
+### 6. Implementation
+
+The purpose of this section is to provide a brief overview of our implementation (repository) meant to be used during the experimental part of our methodology.
+
+The neural networks used throughout the experiments are defined inside the *neural networks* package and instantiated inside *architectures.py*, which includes a dictionary that contains all of the instantiations. Other files that are important are *train_jobs.py* and *predict_jobs.py*, each containing dictionaries that define the parameters for a training task or a prediction (evaluation task). 
+
+To run a training job, run the following command:
+
+```bash
+python train.py <the name of the training job>
+```
+
+The model outputted by the training process will be saved in a folder called *saved_models*.
+
+Running a prediction (evaluation) job can be achieved in a similar fashion, running the following command:
+
+```bash
+python predict.py <the name of the prediction job>
+```
+
+
+<!-- ### Conclusions
+ -->
+
+--- 
 ### References 
-[1. DeltaCNN: End-to-End CNN Inference of Sparse Frame Differences in Videos. Mathias Parger, Chengcheng Tang, Christopher D. Twigg, Cem Keskin, Robert Wang, Markus Steinberger, CVPR 2022, June 2022](https://dabeschte.github.io/DeltaCNN/)  
-[2. Face and hand tracking in the browser with MediaPipe and TensorFlow.js](https://blog.tensorflow.org/2020/03/face-and-hand-tracking-in-browser-with-mediapipe-and-tensorflowjs.html)  
-[3. Human3.6M: Large Scale Datasets and Predictive Methods for 3D Human Sensing in Natural Environments. Catalin Ionescu, Dragos Papava, Vlad Olaru and Cristian Sminchisescu. IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 36, No. 7, July 2014](http://vision.imar.ro/human3.6m/pami-h36m.pdf)  
-[4. EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks. Mingxing Tan, Quoc V. Le. ICML 2019](https://arxiv.org/abs/1905.11946)  
-[5. Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks. Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun. 2016. ](https://arxiv.org/abs/1506.01497)  
+[1. DeltaCNN: End-to-End CNN Inference of Sparse Frame Differences in Videos. Mathias Parger, Chengcheng Tang, Christopher D. Twigg, Cem Keskin, Robert Wang, Markus Steinberger, CVPR 2022, June 2022](https://dabeschte.github.io/DeltaCNN/)
+[2. Face and hand tracking in the browser with MediaPipe and TensorFlow.js](https://blog.tensorflow.org/2020/03/face-and-hand-tracking-in-browser-with-mediapipe-and-tensorflowjs.html)
+[3. Human3.6M: Large Scale Datasets and Predictive Methods for 3D Human Sensing in Natural Environments. Catalin Ionescu, Dragos Papava, Vlad Olaru and Cristian Sminchisescu. IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 36, No. 7, July 2014](http://vision.imar.ro/human3.6m/pami-h36m.pdf)
+[4. EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks. Mingxing Tan, Quoc V. Le. ICML 2019](https://arxiv.org/abs/1905.11946)
+[5. Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks. Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun. 2016. ](https://arxiv.org/abs/1506.01497)
 [6. Generalized Intersection Over Union: A Metric and a Loss for Bounding Box Regression. Hamid Rezatofighi, Nathan Tsoi, JunYoung Gwak, Amir Sadeghian, Ian Reid, Silvio Savarese. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2019, pp. 658-666.](https://openaccess.thecvf.com/content_CVPR_2019/html/Rezatofighi_Generalized_Intersection_Over_Union_A_Metric_and_a_Loss_for_CVPR_2019_paper.html)
+
+
+
+---
+### Task Division
+
+#### Catalin Lupau
+- Implementation of the codebase for the experiments.
+- Running the compensatory experiments.
+- Intepreting the experimental results.
+- Working on the blog post.
+- Cloud Machine Deployment.
+
+
+#### Crina Mihalache
+
+- Review of the original paper.
+- Doing research on how DeltaCNN works.
+- Preparing slides for the weekly TA meetings.
+- Note taking and project organization.
+- Working on the blog post.
+
+
+#### Edmundo Sanz-Gadea López
+- Installing the project environment.
+- Installing all necessary drivers.
+- Running code locally, including deltaCNN implementation.
+- Working on the blog post.
+- Cloud Machine Deployment.
